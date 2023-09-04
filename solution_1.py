@@ -58,7 +58,6 @@ full_data_arr = df \
       "explode_measurements.series"
   ) \
   .collect()
-full_data_arr
 
 manupilated_arr = []
 
@@ -126,7 +125,7 @@ manupilated_df = spark \
     )
     
 manupilated_df.printSchema()
-manupilated_df.show(500, False)
+manupilated_df.show(10, False)
 
 format_ = 'jdbc'
 url = 'jdbc:postgresql://localhost:5432/ntt'
