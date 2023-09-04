@@ -27,29 +27,29 @@ for i in tranform_json:
 
     # print(i["device"]["metaData"]["cloudGateway"]["splitMeasurements"])
 
-    # print("\n\nseries_names----------------------")
+    # print("\n\nsensor_names----------------------")
     # for j in i["measurements"]:
-    #     series_name = list(j["series"].keys())[1]
-    #     print(series_name)
+    #     sensor_names = list(j["series"].keys())[1]
+    #     print(sensor_names)
     
     print("\n\nlen values----------------------")
     for j in i["measurements"]:
-        dollar_time = j["series"]["$_time"]
-        series_values = j["series"][list(j["series"].keys())[1]]
-        if len(dollar_time) != len(series_values):
-            print("not equal", len(dollar_time), len(series_values))
+        dollar_times = j["series"]["$_time"]
+        sensor_values = j["series"][list(j["series"].keys())[1]]
+        if len(dollar_times) != len(sensor_values):
+            print("not equal", len(dollar_times), len(sensor_values))
 
 
 for i in tranform_json:
     for j in i["measurements"]:
         # print(list(j["series"].items())[0][1])
-        series_name = list(j["series"].keys())[1]
+        sensor_name = list(j["series"].keys())[1]
 
-        if ".ab" in series_name:
-            new_series_name = series_name.replace(".ab", "")
-            series_values = j["series"][series_name]
-            del j["series"][series_name]
-            j["series"][new_series_name] = series_values
+        if ".ab" in sensor_name:
+            new_sensor_name = sensor_name.replace(".ab", "")
+            sensor_values = j["series"][sensor_name]
+            del j["series"][sensor_name]
+            j["series"][new_sensor_name] = sensor_values
 
 arr = []
 
@@ -57,13 +57,13 @@ for i in tranform_json:
     for j in i["measurements"]:
         ts = j["ts"]
         dollar_times = j["series"]["$_time"]
-        series_name = list(j["series"].keys())[1]
-        series_values = j["series"][series_name]
+        sensor_name = list(j["series"].keys())[1]
+        sensor_values = j["series"][sensor_name]
         zipped_arr = zip(
             [ts for i in range(len(dollar_times))],
-            [series_name for i in range(len(dollar_times))],
+            [sensor_name for i in range(len(dollar_times))],
             dollar_times,
-            series_values
+            sensor_values
         )
         arr += zipped_arr
 
@@ -75,10 +75,21 @@ conn = psycopg2.connect(
     database="ntt"
 )
 
+table_name = 'table2'
+
 cur = conn.cursor()
 
+cur.execute(f"""
+CREATE TABLE public.{table_name} (
+	"timestamp" varchar(255) NULL,
+    sensor_name varchar(255) NULL,
+	dollar_time varchar(255) NULL,
+	sensor_value varchar(255) NULL
+);
+""")
+
 for i in arr:
-    cur.execute(f"INSERT INTO ntt_case2 VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}')")
+    cur.execute(f"INSERT INTO {table_name} VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}')")
 
 
 conn.commit()

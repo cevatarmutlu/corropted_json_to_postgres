@@ -3,7 +3,6 @@ from pyspark.sql.functions import *
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 
-
 corrupted_json_file = open("src/files/corrupted-file.json")
 corrupted_json_str = corrupted_json_file.read()
 
@@ -28,7 +27,7 @@ df = spark \
 df.printSchema()
 df.show()
 
-series_column_names = df \
+sensor_names = df \
     .select(explode("measurements")) \
     .select("col.series.*") \
     .schema \
@@ -58,6 +57,7 @@ full_data_arr = df \
       "explode_measurements.series"
   ) \
   .collect()
+full_data_arr[:2]
 
 manupilated_arr = []
 
@@ -72,13 +72,13 @@ for row in full_data_arr:
 
   dollar_times = row["series"]["$_time"]
 
-  series_col_name = ""
-  series_col_values = ""
+  sensor_name = ""
+  sensor_values = ""
 
-  for col_name in series_column_names:
+  for col_name in sensor_names:
     if row["series"][col_name] is not None:
-      series_col_name = col_name
-      series_col_values = row["series"][col_name]
+      sensor_name = col_name
+      sensor_values = row["series"][col_name]
   manupilated_arr.append([
     content_spec,
     deviceID,
@@ -88,8 +88,8 @@ for row in full_data_arr:
     subscriptionTopic,
     timestamp, 
     dollar_times, 
-    series_col_name, 
-    series_col_values
+    sensor_name, 
+    sensor_values
   ])
 
 schema = StructType([
@@ -100,17 +100,17 @@ schema = StructType([
     StructField('splitMeasurements', BooleanType()),
     StructField('subscriptionTopic', StringType()),
     StructField('str_timestamp', StringType()),
-    StructField('dollar_time', ArrayType(IntegerType())),
+    StructField('dollar_times', ArrayType(IntegerType())),
     StructField('sensor_name', StringType()),
-    StructField('sensor_value', ArrayType(StringType())),
+    StructField('sensor_values', ArrayType(StringType())),
 ])
 
 manupilated_df = spark \
     .createDataFrame(manupilated_arr, schema) \
     .withColumn("timestamp", to_timestamp("str_timestamp")) \
     .withColumn("sensor_name", regexp_replace("sensor_name", ".ab", "")) \
-    .withColumn("explode_zipped_col", explode(arrays_zip("dollar_time", "sensor_value"))) \
-    .drop("dollar_time", "sensor_value", "str_timestamp") \
+    .withColumn("explode_zipped_col", explode(arrays_zip("dollar_times", "sensor_values"))) \
+    .drop("dollar_times", "sensor_values", "str_timestamp") \
     .select(
         "content-spec",
         "deviceID",
@@ -119,9 +119,9 @@ manupilated_df = spark \
         "splitMeasurements",
         "subscriptionTopic",
         "timestamp",
-        "explode_zipped_col.dollar_time",
+        col("explode_zipped_col.dollar_times").alias("dollar_time"),
         "sensor_name",
-        "explode_zipped_col.sensor_value"
+        col("explode_zipped_col.sensor_values").alias("sensor_value")
     )
     
 manupilated_df.printSchema()
@@ -129,7 +129,7 @@ manupilated_df.show(10, False)
 
 format_ = 'jdbc'
 url = 'jdbc:postgresql://localhost:5432/ntt'
-table_name = 'ntt_case'
+table_name = 'table1'
 user = 'ntt' 
 password = 'ntt'
 driver = 'org.postgresql.Driver'
@@ -144,5 +144,3 @@ manupilated_df \
     .option("driver", driver) \
     .mode('overwrite') \
     .save()
-
-
