@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mobage:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ntt
+      POSTGRES_PASSWORD: ntt
+      POSTGRES_DB: ntt
+    ports:
+      - 5432:5432
