@@ -1,10 +1,11 @@
 ## Corrputed Json to Postgres
 
-This project convert `corropted-file.json` to valid json file and make flatten the json and write the flatten json to postgres with Spark and native python code too.
+This project convert `corropted-file.json` to valid json file and make flatten the json and write the flatten json to postgres with Spark and native python code.
 
-The project content two Jupyter Notebooks. First one use pyspark and second one use native python codes.
+The project include two Jupyter Notebooks and 2 python files. First Jupyter Notebook(`solution_1.ipynb`) use pyspark and second Jupyter Notebook(`solution_2.ipynb`) use native python codes. First python script(`solution_1.py`) is export of `solution_1.ipynb` and second python script(`solution_2.py`) is export of `solution_2.ipynb`.
 
-First one: 
+Jupyter Notebooks: [solution_1.ipynb](./solution_1.ipynb), [solution_2.ipynb](./solution_2.ipynb)
+Python scripts: [solution_1.py](./solution_1.py), [solution_2.py](./solution_2.py)
 
 ## Installation
 
