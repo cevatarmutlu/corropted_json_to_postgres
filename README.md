@@ -2,11 +2,14 @@
 
 This project convert `corropted-file.json` to valid json file and make flatten the json and write the flatten json to postgres with Spark and native python code.
 
-The project include two Jupyter Notebooks and 2 python files. First Jupyter Notebook(`solution_1.ipynb`) use pyspark and second Jupyter Notebook(`solution_2.ipynb`) use native python codes. First python script(`solution_1.py`) is export of `solution_1.ipynb` and second python script(`solution_2.py`) is export of `solution_2.ipynb`.
+The project include two Jupyter Notebooks. First one(`solution_1.ipynb`) use pyspark and second one(`solution_2.ipynb`) use native python codes. 
 
-Jupyter Notebooks: [solution_1.ipynb](./solution_1.ipynb), [solution_2.ipynb](./solution_2.ipynb)
+First Jupyter Notebooks: [solution_1.ipynb](./solution_1.ipynb)
 
-Python scripts: [solution_1.py](./solution_1.py), [solution_2.py](./solution_2.py)
+Second Jupyter Notebooks: [solution_2.ipynb](./solution_2.ipynb)
+
+> `scripts` folder includes python exports of solution_1, solution_2 jupyter notebooks.
+> Python scripts: [solution_1](./solution_1.py), [solution_2](./solution_2.py)
 
 ## Installation
 
