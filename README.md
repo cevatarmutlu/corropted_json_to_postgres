@@ -9,7 +9,7 @@ First Jupyter Notebooks: [solution_1.ipynb](./solution_1.ipynb)
 Second Jupyter Notebooks: [solution_2.ipynb](./solution_2.ipynb)
 
 > `scripts` folder includes python exports of solution_1, solution_2 jupyter notebooks.
-> Python scripts: [solution_1](./solution_1.py), [solution_2](./solution_2.py)
+> Python scripts: [solution_1](./scripts/solution_1.py), [solution_2](./scripts/solution_2.py)
 
 ## Installation
 
