@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 
 solution_support.ipynb
-src/files/corrupted-file.json
+src/files/uncorrupted.json
+src/files/temp_file.json
